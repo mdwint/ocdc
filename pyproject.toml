@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "ocdc"
+version = "0.1.0"
+description = 'A changelog formatter for "people", neat freaks, and sloppy typists.'
+authors = ["Matteo De Wint <matteo@mailfence.com>"]
+packages = [{ include = "ocdc" }]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/mdwint/ocdc"
+keywords = ["changelog", "markdown", "formatter"]
+
+[tool.poetry.scripts]
+ocdc = "ocdc.__main__:main"
+
+[tool.poetry.dependencies]
+pydantic = "^1.9.1"
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+coverage = "^6.4.2"
+flake8 = "^5.0.0"
+isort = "^5.10.1"
+mypy = "^0.971"
+pytest = "^7.1.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

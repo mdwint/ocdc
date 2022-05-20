@@ -1,0 +1,52 @@
+{
+  "title": "Changelog",
+  "intro": "All notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).",
+  "versions": [
+    {
+      "number": "Unreleased",
+      "date": "",
+      "changes": {
+        "Added": {
+          "items": [
+            {
+              "text": "Not much, to be honest.",
+              "level": 0
+            },
+            {
+              "text": "This item is indented.",
+              "level": 1
+            },
+            {
+              "text": "Uneven indents get corrected.",
+              "level": 1
+            },
+            {
+              "text": "Boom! Back to the left. These are links: [one] and [two].",
+              "level": 0
+            }
+          ],
+          "footer": "[one]: http://example.com/one\n[two]: http://example.com/two"
+        }
+      }
+    },
+    {
+      "number": "0.1.0",
+      "date": "2022-07-31",
+      "changes": {
+        "Added": {
+          "items": [
+            {
+              "text": "The first version, obviously. This line is going to be a long one. Let's hope it gets split at 90 characters.",
+              "level": 0
+            }
+          ]
+        },
+        "Fixed": {
+          "items": [
+            { "text": "Nothing at all. This line\nis split early.", "level": 0 }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+.DS_Store
+.coverage
+.hypothesis
+.python-version
+.tox
+dist
+__pycache__
