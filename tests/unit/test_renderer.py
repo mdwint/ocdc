@@ -9,7 +9,7 @@ data_dir = Path(__file__).parent.parent / "data"
 text_paths = sorted(data_dir.glob("*.out.md"))
 
 
-@pytest.mark.parametrize("text_path", text_paths, ids=[str(p) for p in text_paths])
+@pytest.mark.parametrize("text_path", text_paths, ids=[p.name for p in text_paths])
 def test_render_markdown(text_path, dump_expected_output):
     ast_path = Path(str(text_path).split(".", 1)[0] + ".ast.json")
     changelog = ast.Changelog.parse_file(ast_path)

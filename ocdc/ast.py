@@ -22,6 +22,10 @@ class Changes(BaseModel):
     items: List[ListItem]
     footer: str = ""
 
+    def merge(self, other: "Changes") -> None:
+        self.items.extend(other.items)
+        self.footer += "\n" + other.footer
+
 
 class Version(BaseModel):
     number: str
