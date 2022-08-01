@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ocdc"
-version = "0.2.1"
+version = "0.2.2"
 description = 'A changelog formatter for "people", neat freaks, and sloppy typists.'
 authors = ["Matteo De Wint <matteo@mailfence.com>"]
 packages = [{ include = "ocdc" }]

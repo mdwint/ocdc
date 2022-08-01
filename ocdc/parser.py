@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, List, Optional, Set, Tuple
@@ -114,6 +115,17 @@ class Parser:
     def has_more(self) -> bool:
         return self.peek().typ != TokenType.EOF
 
+    class Rollback(Exception):
+        pass
+
+    @contextmanager
+    def checkpoint(self):
+        saved = self.current
+        try:
+            yield
+        except self.Rollback:
+            self.current = saved
+
     def advance(self, n: int = 1):
         if self.has_more:
             self.current += n
@@ -131,6 +143,12 @@ class Parser:
                 self.advance()
                 return True
         return False
+
+    def match_many(self, typ: TokenType) -> int:
+        n = 0
+        while self.match({typ}):
+            n += 1
+        return n
 
     def expect(self, *types: TokenType) -> bool:
         n = len(types)
@@ -198,7 +216,22 @@ def version(p: Parser) -> ast.Version:
         type_, changes_ = changes(p)
         v.changes[type_.value] = changes_
 
+    detect_wrong_title_level(p, 3)
+
     return v
+
+
+def detect_wrong_title_level(p: Parser, expected: int) -> None:
+    with p.checkpoint():
+        level = p.match_many(TokenType.HASH)
+        if level and level != expected:
+            token = p.peek(1)
+            p.match({TokenType.TEXT})
+            skip_newlines(p)
+            if p.match({TokenType.DASH}):
+                msg = f"Expected a title of H{expected}, but found H{level}"
+                raise p.error(msg, token, back=level)
+        raise p.Rollback
 
 
 def changes(p: Parser) -> Tuple[ast.ChangeType, ast.Changes]:

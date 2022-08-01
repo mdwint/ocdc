@@ -5,10 +5,14 @@ import pytest
 from ocdc.parser import ParseError, ast, parse
 
 data_dir = Path(__file__).parent.parent / "data"
-text_paths = sorted(data_dir.glob("*.in.md"))
 
 
-@pytest.mark.parametrize("text_path", text_paths, ids=[str(p) for p in text_paths])
+def with_paths(pattern: str):
+    paths = sorted(data_dir.glob(pattern))
+    return pytest.mark.parametrize("text_path", paths, ids=[p.name for p in paths])
+
+
+@with_paths("*.in.md")
 def test_parse(text_path, dump_expected_output):
     text = text_path.read_text()
 
@@ -25,32 +29,17 @@ def test_parse(text_path, dump_expected_output):
     assert a == b
 
 
-def test_parse_error_unexpected_title_for_changes():
-    text = (data_dir / "unexpected_title_for_changes.err.md").read_text()
+@with_paths("*.err.md")
+def test_parse_error(text_path, dump_expected_output):
+    text = text_path.read_text()
 
     with pytest.raises(ParseError) as excinfo:
         parse(text)
+    actual_error = str(excinfo.value)
 
-    expected_error = """
-Unexpected title for changes (line 11, column 5):
+    error_path = Path(str(text_path).split(".", 1)[0] + ".err.txt")
+    if dump_expected_output:
+        dump_expected_output(error_path, actual_error + "\n")
 
-  ### Oops
-      ^^^^
-""".strip()
-    assert str(excinfo.value) == expected_error
-
-
-def test_parse_error_unprocessable_text():
-    text = (data_dir / "unprocessable_text.err.md").read_text()
-
-    with pytest.raises(ParseError) as excinfo:
-        parse(text)
-
-    expected_error = """
-Unprocessable text (line 10, column 3):
-
-  - The first version.
-    #### This trailing text cannot be parsed
-    ^
-""".strip()
-    assert str(excinfo.value) == expected_error
+    expected_error = error_path.read_text().strip()
+    assert actual_error == expected_error
