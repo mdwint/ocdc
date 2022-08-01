@@ -38,10 +38,11 @@ def annotate(source: str, token: "Token", back: int = 0, forward: int = 0) -> st
         col_start -= back
     if forward:
         col_end += forward
+    col = max(0, col_start)
 
     arrows = " " * col_start + "^" * (col_end - col_start)
     details = (f"  {prev}\n" if prev else "") + f"  {line}\n  {arrows}"
-    return f"at line {row + 1}, column {col_start + 1}:\n\n{details}"
+    return f"at line {row + 1}, column {col + 1}:\n\n{details}"
 
 
 class TokenType(Enum):
