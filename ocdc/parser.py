@@ -95,7 +95,7 @@ def scan_token(t: Tokenizer) -> None:
     elif char.isspace():
         pass
     else:
-        if t.col == 1 and char == "[":
+        if t.col == 1 and char == "[" and t.peek(-3) == "\n":
             t.add_token(TokenType.FOOTER_BEGIN)
         while t.peek() != "\n" and t.has_more:
             t.advance()
@@ -120,7 +120,7 @@ class Parser:
         return self.peek()
 
     def check(self, typ: TokenType) -> bool:
-        return self.has_more and self.peek().typ == typ
+        return self.has_more and self.peek().typ is typ
 
     def peek(self, back: int = 0) -> Token:
         return self.tokens[self.current - back]
@@ -135,7 +135,7 @@ class Parser:
     def expect(self, *types: TokenType) -> bool:
         n = len(types)
         if self.current + n < len(self.tokens):
-            if all(self.peek(-i).typ == typ for i, typ in enumerate(types)):
+            if all(self.peek(-i).typ is typ for i, typ in enumerate(types)):
                 self.advance(n)
                 return True
         return False
@@ -162,6 +162,10 @@ def changelog(p: Parser) -> ast.Changelog:
         c.title = p.peek(1).text
 
     c.intro = text(p)
+    if p.peek().typ is TokenType.FOOTER_BEGIN:
+        c.intro += "\n"
+        while p.match({TokenType.FOOTER_BEGIN}):
+            c.intro += "\n" + text(p)
 
     while p.expect(TokenType.HASH, TokenType.HASH, TokenType.TEXT):
         c.versions.append(version(p))
