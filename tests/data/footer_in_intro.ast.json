@@ -1,0 +1,21 @@
+{
+  "title": "Changelog",
+  "intro": "All notable changes to this formula will be documented in this file.\n\nThese are reference-style links: [one] and [two].\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to\n[PEP 440](https://www.python.org/dev/peps/pep-0440/).\n\n[one]: http://example.com/one\n[two]: http://example.com/two",
+  "versions": [
+    {
+      "number": "0.1.0",
+      "date": "2022-08-01",
+      "changes": {
+        "Added": {
+          "items": [
+            {
+              "text": "The first version.\nThis line continues.",
+              "level": 0
+            }
+          ],
+          "footer": ""
+        }
+      }
+    }
+  ]
+}
