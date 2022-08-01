@@ -13,6 +13,13 @@ with some slight modifications:
   languages, so why throw in weird symbols like that?
 
 
+## Installation
+
+```console
+$ pip install ocdc
+```
+
+
 ## Usage
 
 To format `CHANGELOG.md` in the current directory, run `ocdc` without arguments.
@@ -44,3 +51,9 @@ $ ocdc --help
 ## Configuration
 
 Configuration is for the weak-willed. There shall be only one true format.
+
+
+## Disclaimer
+
+This thing is new, and it might eat your changelog! Back up your files (in git)
+before trying `ocdc`.
