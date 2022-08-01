@@ -9,15 +9,19 @@ text_paths = sorted(data_dir.glob("*.in.md"))
 
 
 @pytest.mark.parametrize("text_path", text_paths, ids=[str(p) for p in text_paths])
-def test_parse(text_path):
+def test_parse(text_path, dump_expected_output):
     text = text_path.read_text()
-    ast_path = Path(str(text_path).split(".", 1)[0] + ".ast.json")
-    expected_ast = ast.Changelog.parse_file(ast_path)
 
     actual_ast = parse(text)
+    a = actual_ast.json(indent=2, exclude_defaults=True)
 
-    a = actual_ast.json(indent=2)
-    b = expected_ast.json(indent=2)
+    ast_path = Path(str(text_path).split(".", 1)[0] + ".ast.json")
+    if dump_expected_output:
+        dump_expected_output(ast_path, a + "\n")
+
+    expected_ast = ast.Changelog.parse_file(ast_path)
+    b = expected_ast.json(indent=2, exclude_defaults=True)
+
     assert a == b
 
 

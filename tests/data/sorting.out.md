@@ -6,27 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## Unreleased
+
+### Added
+
+- Not much, to be honest.
+
+### Removed
+
+- Some cruft.
+
+
 ## 0.2.0 - 2022-08-01
 
 ### Added
 
-- Print output on success.
-
-### Changed
-
-- Sort version sections by version number.
-- Sort changes sections by type.
-
-
-## 0.1.1 - 2022-08-01
+- A nice feature.
 
 ### Fixed
 
-- Handle footers in the intro section.
+- A small bug.
 
 
-## 0.1.0 - 2022-08-01
+## 0.1.0 - 2022-07-31
 
 ### Added
 
-- Initial version.
+- The first version, obviously.
+
+### Fixed
+
+- Nothing at all.

@@ -5,24 +5,19 @@
     {
       "number": "Unreleased",
       "changes": {
+        "Removed": {
+          "items": [
+            {
+              "text": "Some cruft."
+            }
+          ]
+        },
         "Added": {
           "items": [
             {
               "text": "Not much, to be honest."
-            },
-            {
-              "text": "This item is indented.",
-              "level": 1
-            },
-            {
-              "text": "Uneven indents get corrected.",
-              "level": 1
-            },
-            {
-              "text": "Boom! Back to the left. These are links: [one] and [two]."
             }
-          ],
-          "footer": "[one]: http://example.com/one\n[two]: http://example.com/two"
+          ]
         }
       }
     },
@@ -33,14 +28,34 @@
         "Added": {
           "items": [
             {
-              "text": "The first version, obviously. This line is going to be a long one. Let's hope it gets split at 90 characters."
+              "text": "The first version, obviously."
             }
           ]
         },
         "Fixed": {
           "items": [
             {
-              "text": "Nothing at all. This line\nis split early."
+              "text": "Nothing at all."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "number": "0.2.0",
+      "date": "2022-08-01",
+      "changes": {
+        "Fixed": {
+          "items": [
+            {
+              "text": "A small bug."
+            }
+          ]
+        },
+        "Added": {
+          "items": [
+            {
+              "text": "A nice feature."
             }
           ]
         }

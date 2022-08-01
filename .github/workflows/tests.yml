@@ -1,6 +1,12 @@
 name: Run tests
-
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+    - master
+    paths-ignore:
+    - CHANGELOG.md
+    - README.md
 
 jobs:
   build:
@@ -8,7 +14,6 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
