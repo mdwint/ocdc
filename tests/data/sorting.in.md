@@ -5,28 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
 
-## 0.2.0 - 2022-08-01
+### Removed
+
+- Some cruft.
 
 ### Added
 
-- Print output on success.
+- Not much, to be honest.
 
-### Changed
+## 0.1.0 - 2022-07-31
 
-- Sort version sections by version number.
-- Sort changes sections by type.
+### Added
 
-
-## 0.1.1 - 2022-08-01
+- The first version, obviously.
 
 ### Fixed
 
-- Handle footers in the intro section.
+- Nothing at all.
 
+## 0.2.0 - 2022-08-01
 
-## 0.1.0 - 2022-08-01
+### Fixed
+
+- A small bug.
 
 ### Added
 
-- Initial version.
+- A nice feature.

@@ -62,6 +62,9 @@ def format(args: argparse.Namespace) -> None:
             sys.exit(f"ERROR: {path} would be reformatted")
         else:
             path.write_text(result)
+            print(f"{path} was reformatted")
+    else:
+        print(f"{path} is well-formatted")
 
 
 def create_new(args: argparse.Namespace) -> None:

@@ -9,11 +9,9 @@
         "Added": {
           "items": [
             {
-              "text": "The first version.\nThis line continues.",
-              "level": 0
+              "text": "The first version.\nThis line continues."
             }
-          ],
-          "footer": ""
+          ]
         }
       }
     }

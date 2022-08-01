@@ -1,5 +1,8 @@
 import datetime as dt
+import sys
 from textwrap import TextWrapper, indent
+
+from packaging.version import InvalidVersion, Version as ParsedVersion
 
 from . import ast
 
@@ -18,6 +21,19 @@ def wrap_item(item: ast.ListItem) -> str:
     return indent(item_wrapper.fill(item.text), item.level * INDENT)
 
 
+MAX_VERSION = ParsedVersion(str(sys.maxsize))
+
+
+def parse_version(number: str) -> ParsedVersion:
+    try:
+        return ParsedVersion(number)
+    except InvalidVersion:
+        return MAX_VERSION
+
+
+change_type_order = {t.value: i for i, t in enumerate(ast.ChangeType)}
+
+
 def render_markdown(c: ast.Changelog) -> str:
     text = ""
 
@@ -27,14 +43,17 @@ def render_markdown(c: ast.Changelog) -> str:
     if c.intro:
         text += wrap(c.intro) + "\n"
 
-    for v in c.versions:
+    version_order = {v.number: parse_version(v.number) for v in c.versions}
+
+    for v in sorted(c.versions, reverse=True, key=lambda v: version_order[v.number]):
         text += f"\n\n## {v.number}"
         if v.date:
             text += f" - {v.date}"
         text += "\n"
 
-        for type_, changes in v.changes.items():
+        for type_ in sorted(v.changes, key=lambda t: change_type_order[t]):
             text += f"\n### {type_}\n\n"
+            changes = v.changes[type_]
             for item in changes.items:
                 text += wrap_item(item) + "\n"
             if changes.footer:
