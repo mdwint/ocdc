@@ -1,0 +1,30 @@
+{
+  "title": "Changelog",
+  "intro": "All notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).",
+  "versions": [
+    {
+      "number": "0.1.0",
+      "date": "2022-07-31",
+      "changes": {
+        "Added": {
+          "items": [
+            {
+              "text": "Something in [one]."
+            },
+            {
+              "text": "Something in [two]."
+            }
+          ],
+          "footer": "[one]: http://example.com/one\n[two]: http://example.com/two"
+        },
+        "Fixed": {
+          "items": [
+            {
+              "text": "A bug."
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

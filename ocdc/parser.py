@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from . import ast
 from .renderer import INDENT
@@ -13,15 +13,35 @@ def parse(text: str) -> ast.Changelog:
 
 
 class ParseError(Exception):
-    def __init__(self, msg: str, source: str, row: int, col_start: int, col_end: int):
-        lines = source.splitlines()
-        prev, line = lines[row - 1 : row + 1] if row > 0 else ("", lines[row])
-
-        arrows = " " * col_start + "^" * (col_end - col_start)
-        details = (f"  {prev}\n" if prev else "") + f"  {line}\n  {arrows}"
-
-        msg = f"{msg} (line {row + 1}, column {col_start + 1}):\n\n{details}"
+    def __init__(
+        self,
+        msg: str,
+        source: str,
+        token: "Token",
+        back: int = 0,
+        forward: int = 0,
+        hint: str = "",
+    ):
+        msg = f"{msg} {annotate(source, token, back, forward)}"
+        if hint:
+            msg += f"\n\nHint: {hint}"
         super().__init__(msg)
+
+
+def annotate(source: str, token: "Token", back: int = 0, forward: int = 0) -> str:
+    lines = source.splitlines()
+    row = min(token.row, len(lines) - 1)
+    prev, line = lines[row - 1 : row + 1] if row > 0 else ("", lines[row])
+
+    col_start = col_end = token.col
+    if back:
+        col_start -= back
+    if forward:
+        col_end += forward
+
+    arrows = " " * col_start + "^" * (col_end - col_start)
+    details = (f"  {prev}\n" if prev else "") + f"  {line}\n  {arrows}"
+    return f"at line {row + 1}, column {col_start + 1}:\n\n{details}"
 
 
 class TokenType(Enum):
@@ -36,7 +56,6 @@ class TokenType(Enum):
 @dataclass
 class Token:
     typ: TokenType
-    pos: int
     row: int
     col: int
     text: str
@@ -71,7 +90,7 @@ class Tokenizer:
 
     def add_token(self, typ: TokenType, text: str = "", parsed: Any = None):
         col = self.col - len(self.matched)
-        token = Token(typ, self.start, self.row, col, text or self.matched, parsed)
+        token = Token(typ, self.row, col, text or self.matched, parsed)
         self.tokens.append(token)
 
     def __call__(self) -> List[Token]:
@@ -159,15 +178,15 @@ class Parser:
         return False
 
     def error(
-        self, msg: str, token: Optional[Token] = None, back: int = 0, forward: int = 0
+        self,
+        msg: str,
+        token: Optional[Token] = None,
+        back: int = 0,
+        forward: int = 0,
+        hint: str = "",
     ) -> ParseError:
         token = token or self.peek()
-        col_start = col_end = token.col
-        if back:
-            col_start -= back
-        if forward:
-            col_end += forward
-        return ParseError(msg, self.source, token.row, col_start, col_end)
+        return ParseError(msg, self.source, token, back, forward, hint)
 
     def __call__(self) -> ast.Changelog:
         return changelog(self)
@@ -185,8 +204,19 @@ def changelog(p: Parser) -> ast.Changelog:
         while p.match({TokenType.FOOTER_BEGIN}):
             c.intro += "\n" + text(p)
 
+    seen_version_titles: Dict[str, Token] = {}
     while p.expect(TokenType.HASH, TokenType.HASH, TokenType.TEXT):
-        c.versions.append(version(p))
+        v, title_token = version(p)
+
+        duplicate_title_token = seen_version_titles.get(v.number)
+        if duplicate_title_token:
+            forward = len(v.number)
+            at = annotate(p.source, title_token, forward=forward)
+            msg, hint = "Duplicate version", f"Version was first used {at}"
+            raise p.error(msg, duplicate_title_token, forward=forward, hint=hint)
+
+        seen_version_titles[v.number] = title_token
+        c.versions.append(v)
 
     if p.has_more:
         raise p.error("Unprocessable text", forward=len(p.peek().text))
@@ -201,8 +231,9 @@ def text(p: Parser) -> str:
     return text.strip()
 
 
-def version(p: Parser) -> ast.Version:
-    title = p.peek(1).text
+def version(p: Parser) -> Tuple[ast.Version, Token]:
+    title_token = p.peek(1)
+    title = title_token.text
     try:
         number, date = title.split(" - ", 1)
     except ValueError:
@@ -214,11 +245,15 @@ def version(p: Parser) -> ast.Version:
 
     while p.expect(TokenType.HASH, TokenType.HASH, TokenType.HASH, TokenType.TEXT):
         type_, changes_ = changes(p)
-        v.changes[type_.value] = changes_
+        key = type_.value
+        if key in v.changes:
+            v.changes[key].merge(changes_)
+        else:
+            v.changes[key] = changes_
 
     detect_wrong_title_level(p, 3)
 
-    return v
+    return v, title_token
 
 
 def detect_wrong_title_level(p: Parser, expected: int) -> None:
@@ -240,8 +275,9 @@ def changes(p: Parser) -> Tuple[ast.ChangeType, ast.Changes]:
     try:
         type_ = getattr(ast.ChangeType, title)
     except AttributeError:
-        err = p.error("Unexpected title for changes", token, forward=len(title))
-        raise err from None
+        msg = "Unexpected title for changes"
+        hint = "Choose from " + ", ".join(f'"{t.value}"' for t in ast.ChangeType) + "."
+        raise p.error(msg, token, forward=len(title), hint=hint) from None
 
     skip_newlines(p)
 

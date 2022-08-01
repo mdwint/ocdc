@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Raise error on wrong title level for changes.
+- Raise error on duplicate version sections.
+- Merge duplicate changes sections.
 
 
 ## 0.2.1 - 2022-08-01

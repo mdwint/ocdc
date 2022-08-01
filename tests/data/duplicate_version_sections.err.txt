@@ -1,0 +1,9 @@
+Duplicate version at line 8, column 4:
+
+  ## 0.1.0 - 2022-08-02
+     ^^^^^
+
+Hint: Version was first used at line 20, column 4:
+
+  ## 0.1.0 - 2022-07-31
+     ^^^^^
