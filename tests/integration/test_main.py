@@ -8,11 +8,11 @@ import pytest
 from ocdc.__main__ import DEFAULT_PATH, main
 
 data_dir = Path(__file__).parent.parent / "data"
+src_path = data_dir / "basic.in.md"
 
 
 @pytest.fixture()
 def tmp_path(chdir):
-    src_path = data_dir / "basic.in.md"
     with TemporaryDirectory() as tmp_dir:
         tmp_path = Path(tmp_dir, DEFAULT_PATH)
         shutil.copyfile(src_path, tmp_path)
@@ -31,6 +31,11 @@ def test_format(tmp_path):
 
 def test_format_path(tmp_path):
     ocdc("--path", str(tmp_path.parent))
+
+
+def test_format_read_stdin():
+    with patch("sys.stdin.read", src_path.read_text):
+        ocdc("--path", "-")
 
 
 def test_check(tmp_path):

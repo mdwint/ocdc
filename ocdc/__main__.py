@@ -14,7 +14,14 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     p.set_defaults(func=format)
     p.add_argument(
-        "-p", "--path", type=Path, default=DEFAULT_PATH, help="Path to changelog"
+        "-p",
+        "--path",
+        type=Path,
+        default=DEFAULT_PATH,
+        help=(
+            "Path to changelog. Pass '-' to read from stdin\n"
+            "and write the formatted result to stdout."
+        ),
     )
     p.add_argument(
         "--check",
@@ -52,12 +59,18 @@ def _full_path(path: Path) -> Path:
 
 
 def format(args: argparse.Namespace) -> None:
-    path = _full_path(args.path)
-    orig = path.read_text()
+    is_stdin = str(args.path) == "-"
+    if is_stdin:
+        orig = sys.stdin.read()
+    else:
+        path = _full_path(args.path)
+        orig = path.read_text()
 
     result = api.format(orig)
 
-    if result != orig:
+    if is_stdin:
+        print(result)
+    elif result != orig:
         if args.check:
             sys.exit(f"ERROR: {path} would be reformatted")
         else:
