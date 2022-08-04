@@ -228,7 +228,7 @@ def changelog(p: Parser) -> ast.Changelog:
 def text(p: Parser) -> str:
     text = ""
     while p.match({TokenType.TEXT, TokenType.NEWLINE}):
-        text += p.peek(1).text
+        text += p.peek(1).text.rstrip(" \t")
     return text.strip()
 
 
