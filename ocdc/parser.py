@@ -33,11 +33,11 @@ def annotate(source: str, token: "Token", back: int = 0, forward: int = 0) -> st
     row = min(token.row, len(lines) - 1)
     prev, line = lines[row - 1 : row + 1] if row > 0 else ("", lines[row])
 
-    col_start = col_end = token.col
-    if back:
-        col_start -= back
-    if forward:
-        col_end += forward
+    if not (back or forward):
+        forward = len(token.text)
+
+    col_start = token.col - back
+    col_end = token.col + forward
     col = max(0, col_start)
 
     arrows = " " * col_start + "^" * (col_end - col_start)
@@ -220,7 +220,7 @@ def changelog(p: Parser) -> ast.Changelog:
         c.versions.append(v)
 
     if p.has_more:
-        raise p.error("Unprocessable text", forward=len(p.peek().text))
+        raise p.error("Unprocessable text")
 
     return c
 
@@ -270,8 +270,7 @@ def detect_wrong_title_level(p: Parser, expected: int, reason: str) -> None:
                     msg += f", but found H{level}"
                     raise p.error(msg, token, back=level)
                 else:
-                    token = p.peek(1)
-                    raise p.error(msg, token, back=len(token.text))
+                    raise p.error(msg, token=p.peek(1))
         raise p.Rollback
 
 
@@ -283,7 +282,7 @@ def changes(p: Parser) -> Tuple[ast.ChangeType, ast.Changes]:
     except AttributeError:
         msg = "Unexpected title for changes"
         hint = "Choose from " + ", ".join(f'"{t.value}"' for t in ast.ChangeType) + "."
-        raise p.error(msg, token, forward=len(title), hint=hint) from None
+        raise p.error(msg, token, hint=hint) from None
 
     skip_newlines(p)
 
