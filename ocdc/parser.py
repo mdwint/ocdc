@@ -252,21 +252,26 @@ def version(p: Parser) -> Tuple[ast.Version, Token]:
         else:
             v.changes[key] = changes_
 
-    detect_wrong_title_level(p, 3)
+    detect_wrong_title_level(p, 3, "before changes")
 
     return v, title_token
 
 
-def detect_wrong_title_level(p: Parser, expected: int) -> None:
+def detect_wrong_title_level(p: Parser, expected: int, reason: str) -> None:
     with p.checkpoint():
         level = p.match_many(TokenType.HASH)
-        if level and level != expected:
+        if level != expected:
             token = p.peek(1)
             p.match({TokenType.TEXT})
             skip_newlines(p)
             if p.match({TokenType.DASH}):
-                msg = f"Expected a title of H{expected}, but found H{level}"
-                raise p.error(msg, token, back=level)
+                msg = f"Expected a title of H{expected} {reason}"
+                if level:
+                    msg += f", but found H{level}"
+                    raise p.error(msg, token, back=level)
+                else:
+                    token = p.peek(1)
+                    raise p.error(msg, token, back=len(token.text))
         raise p.Rollback
 
 

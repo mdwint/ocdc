@@ -1,4 +1,4 @@
-Expected a title of H3, but found H2 at line 14, column 1:
+Expected a title of H3 before changes, but found H2 at line 14, column 1:
 
   ## Removed
   ^^

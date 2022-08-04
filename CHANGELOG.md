@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Raise error on missing title before changes.
 - Strip trailing whitespace from text.
 
 
@@ -32,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Raise error on wrong title level for changes.
+- Raise error on wrong title level before changes.
 - Raise error on duplicate version sections.
 - Merge duplicate changes sections.
 
@@ -48,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Print output on success.
+- Print message on success.
 
 ### Changed
 
