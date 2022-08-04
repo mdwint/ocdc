@@ -120,7 +120,7 @@ def scan_token(t: Tokenizer) -> None:
             t.add_token(TokenType.FOOTER_BEGIN)
         while t.peek() != "\n" and t.has_more:
             t.advance()
-        text = t.matched
+        text = t.matched.strip()
         if text:
             t.add_token(TokenType.TEXT, text)
 
@@ -228,7 +228,7 @@ def changelog(p: Parser) -> ast.Changelog:
 def text(p: Parser) -> str:
     text = ""
     while p.match({TokenType.TEXT, TokenType.NEWLINE}):
-        text += p.peek(1).text.rstrip(" \t")
+        text += p.peek(1).text
     return text.strip()
 
 
