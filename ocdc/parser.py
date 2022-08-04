@@ -240,8 +240,8 @@ def version(p: Parser) -> Tuple[ast.Version, Token]:
     except ValueError:
         number, date = title, ""
 
-    number = number.strip("[]")
-    v = ast.Version(number=number, date=date)
+    number = number.strip().strip("[]")
+    v = ast.Version(number=number, date=date.strip())
     skip_newlines(p)
 
     while p.expect(TokenType.HASH, TokenType.HASH, TokenType.HASH, TokenType.TEXT):
