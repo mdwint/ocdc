@@ -196,6 +196,7 @@ class Parser:
 def changelog(p: Parser) -> ast.Changelog:
     c = ast.Changelog()
 
+    skip_newlines(p)
     if p.expect(TokenType.HASH, TokenType.TEXT):
         c.title = p.peek(1).text
 
