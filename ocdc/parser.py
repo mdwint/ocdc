@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 
 from . import ast
 from .renderer import INDENT
@@ -89,7 +89,7 @@ class Tokenizer:
         except IndexError:
             return "\0"
 
-    def add_token(self, typ: TokenType, text: str = "", parsed: Any = None):
+    def add_token(self, typ: TokenType, text: str = "", parsed: Any = None) -> None:
         col = self.col - len(self.matched)
         token = Token(typ, self.row, col, text or self.matched, parsed)
         self.tokens.append(token)
@@ -110,7 +110,7 @@ def scan_token(t: Tokenizer) -> None:
     elif char == "-":
         t.add_token(TokenType.DASH)
     elif char == "\n":
-        t.add_token(TokenType.NEWLINE, char)
+        t.add_token(TokenType.NEWLINE)
         t.row += 1
         t.col = 0
     elif char.isspace():
@@ -139,17 +139,16 @@ class Parser:
         pass
 
     @contextmanager
-    def checkpoint(self):
+    def checkpoint(self) -> Iterator[None]:
         saved = self.current
         try:
             yield
         except self.Rollback:
             self.current = saved
 
-    def advance(self, n: int = 1):
+    def advance(self, n: int = 1) -> None:
         if self.has_more:
             self.current += n
-        return self.peek()
 
     def check(self, typ: TokenType) -> bool:
         return self.has_more and self.peek().typ is typ
