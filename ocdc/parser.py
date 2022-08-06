@@ -13,19 +13,7 @@ def parse(text: str) -> ast.Changelog:
 
 
 class ParseError(Exception):
-    def __init__(
-        self,
-        msg: str,
-        source: str,
-        token: "Token",
-        back: int = 0,
-        forward: int = 0,
-        hint: str = "",
-    ):
-        msg = f"{msg} {annotate(source, token, back, forward)}"
-        if hint:
-            msg += f"\n\nHint: {hint}"
-        super().__init__(msg)
+    pass
 
 
 def annotate(source: str, token: "Token", back: int = 0, forward: int = 0) -> str:
@@ -186,7 +174,10 @@ class Parser:
         hint: str = "",
     ) -> ParseError:
         token = token or self.peek()
-        return ParseError(msg, self.source, token, back, forward, hint)
+        msg += " " + annotate(self.source, token, back, forward)
+        if hint:
+            msg += f"\n\nHint: {hint}"
+        return ParseError(msg)
 
     def __call__(self) -> ast.Changelog:
         return changelog(self)
