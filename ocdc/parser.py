@@ -12,27 +12,6 @@ def parse(text: str) -> ast.Changelog:
     return Parser(text, tokens)()
 
 
-class ParseError(Exception):
-    pass
-
-
-def annotate(source: str, token: "Token", back: int = 0, forward: int = 0) -> str:
-    lines = source.splitlines()
-    row = min(token.row, len(lines) - 1)
-    prev, line = lines[row - 1 : row + 1] if row > 0 else ("", lines[row])
-
-    if not (back or forward):
-        forward = len(token.text)
-
-    col_start = token.col - back
-    col_end = token.col + forward
-    col = max(0, col_start)
-
-    arrows = " " * col_start + "^" * (col_end - col_start)
-    details = (f"  {prev}\n" if prev else "") + f"  {line}\n  {arrows}"
-    return f"at line {row + 1}, column {col + 1}:\n\n{details}"
-
-
 class TokenType(Enum):
     HASH = auto()
     DASH = auto()
@@ -111,6 +90,10 @@ def scan_token(t: Tokenizer) -> None:
         text = t.matched.strip()
         if text:
             t.add_token(TokenType.TEXT, text)
+
+
+class ParseError(Exception):
+    pass
 
 
 class Parser:
@@ -294,3 +277,20 @@ def changes(p: Parser) -> Tuple[ast.ChangeType, ast.Changes]:
 def skip_newlines(p: Parser) -> None:
     while p.match({TokenType.NEWLINE}):
         pass
+
+
+def annotate(source: str, token: Token, back: int = 0, forward: int = 0) -> str:
+    lines = source.splitlines()
+    row = min(token.row, len(lines) - 1)
+    prev, line = lines[row - 1 : row + 1] if row > 0 else ("", lines[row])
+
+    if not (back or forward):
+        forward = len(token.text)
+
+    col_start = token.col - back
+    col_end = token.col + forward
+    col = max(0, col_start)
+
+    arrows = " " * col_start + "^" * (col_end - col_start)
+    details = (f"  {prev}\n" if prev else "") + f"  {line}\n  {arrows}"
+    return f"at line {row + 1}, column {col + 1}:\n\n{details}"
