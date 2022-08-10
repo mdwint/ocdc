@@ -3,6 +3,53 @@
   "intro": "All notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).",
   "versions": [
     {
+      "number": "0.3.0",
+      "date": "2022-08-10",
+      "changes": {
+        "Added": {
+          "items": [
+            {
+              "text": "Initial version."
+            },
+            {
+              "text": "Another added item."
+            }
+          ],
+          "footer": "[one]: http://example.com/one"
+        },
+        "Changed": {
+          "items": [
+            {
+              "text": "Something changed."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "number": "0.2.0",
+      "date": "2022-08-10",
+      "changes": {
+        "Added": {
+          "items": [
+            {
+              "text": "Initial version."
+            },
+            {
+              "text": "Another added item."
+            }
+          ]
+        },
+        "Changed": {
+          "items": [
+            {
+              "text": "Something changed."
+            }
+          ]
+        }
+      }
+    },
+    {
       "number": "0.1.0",
       "date": "2022-07-31",
       "changes": {

@@ -24,7 +24,7 @@ class Changes(BaseModel):
 
     def merge(self, other: "Changes") -> None:
         self.items.extend(other.items)
-        self.footer += "\n" + other.footer
+        self.footer = f"{self.footer}\n{other.footer}".strip()
 
 
 class Version(BaseModel):
