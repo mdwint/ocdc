@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+- Upgraded to Pydantic v2.
+
+### Removed
+
+- Dropped Python 3.7 support.
+
 ### Fixed
 
 - Use a single trailing newline when writing to stdout.
