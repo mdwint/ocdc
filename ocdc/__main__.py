@@ -69,7 +69,7 @@ def format(args: argparse.Namespace) -> None:
     result = api.format(orig)
 
     if is_stdin:
-        print(result)
+        print(result, end="")
     elif result != orig:
         if args.check:
             sys.exit(f"ERROR: {path} would be reformatted")
