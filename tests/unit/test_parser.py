@@ -17,14 +17,14 @@ def test_parse(text_path, dump_expected_output):
     text = text_path.read_text()
 
     actual_ast = parse(text)
-    a = actual_ast.json(indent=2, exclude_defaults=True)
+    a = actual_ast.model_dump_json(indent=2, exclude_defaults=True)
 
     ast_path = Path(str(text_path).split(".", 1)[0] + ".ast.json")
     if dump_expected_output:
         dump_expected_output(ast_path, a + "\n")
 
-    expected_ast = ast.Changelog.parse_file(ast_path)
-    b = expected_ast.json(indent=2, exclude_defaults=True)
+    expected_ast = ast.Changelog.model_validate_json(ast_path.read_text())
+    b = expected_ast.model_dump_json(indent=2, exclude_defaults=True)
 
     assert a == b
 

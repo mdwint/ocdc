@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## 0.4.0 - 2023-07-14
+
+### Changed
+
+- Upgraded to Pydantic v2.
+
+### Removed
+
+- Dropped Python 3.7 support.
+
+### Fixed
+
+- Use a single trailing newline when writing to stdout.
+
+
 ## 0.3.3 - 2022-08-10
 
 ### Fixed
