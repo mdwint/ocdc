@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.5.0 - 2023-11-25
 
+### Added
+
+- `pre-commit-hooks.yml` configuration, so that this can be used with the [pre-commit
+  framework](https://pre-commit.com/).
 
 ### Changed
 
