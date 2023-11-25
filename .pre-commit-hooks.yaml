@@ -1,0 +1,16 @@
+- id: ocdc
+  name: OCDC Changelog formatter
+  description: "OCDC: Obsessive-Compulsive Development Changelogs"
+  entry: ocdc
+  args: ["--path"]
+  language: python
+  types: [file, text, markdown]
+  files: '(?i)CHANGELOG\.md'
+- id: ocdc-check
+  name: OCDC Changelog formatter (check only)
+  description: "OCDC: Obsessive-Compulsive Development Changelogs"
+  entry: ocdc
+  args: [--check, "--path"]
+  language: python
+  types: [file, text, markdown]
+  files: '(?i)CHANGELOG\.md'
