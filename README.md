@@ -9,8 +9,7 @@ with some slight modifications:
 
 - Lines are wrapped at 90 characters.
 - Version sections are separated by two blank lines to aid visual scanning.
-- Square brackets are not used in titles. Changelogs aren't programming
-  languages, so why throw in weird symbols like that?
+- Square brackets are not used in titles.
 
 
 ## Installation
@@ -51,9 +50,3 @@ $ ocdc --help
 ## Configuration
 
 Configuration is for the weak-willed. There shall be only one true format.
-
-
-## Disclaimer
-
-This thing is new, and it might eat your changelog! Back up your files (in git)
-before trying `ocdc`.
